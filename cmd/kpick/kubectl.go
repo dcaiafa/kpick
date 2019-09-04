@@ -14,11 +14,22 @@ type Config struct {
 	CurrentContext string `json:"current-context"`
 }
 
+func (c *Config) GetContext(name string) *Context {
+	for _, ctx := range c.Contexts {
+		if ctx.Name == name {
+			return ctx
+		}
+	}
+
+	return nil
+}
+
 type Context struct {
 	Name    string `json:"name"`
 	Context struct {
-		Cluster string `json:"cluster"`
-		User    string `json:"user"`
+		Cluster   string `json:"cluster"`
+		User      string `json:"user"`
+		Namespace string `json:"namespace"`
 	}
 }
 
@@ -107,4 +118,9 @@ func deleteContext(contextName string) {
 func renameContext(originalName, newName string) {
 	exec.Command(
 		"kubectl", "config", "rename-context", originalName, newName).Run()
+}
+
+func changeNamespace(contextName, namespace string) {
+	exec.Command(
+		"kubectl", "config", "set-context", contextName, "--namespace", namespace).Run()
 }

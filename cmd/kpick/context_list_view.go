@@ -22,7 +22,7 @@ func NewContextListView() *ContextListView {
 	v.flex = tview.NewFlex().
 		SetDirection(tview.FlexRow).
 		AddItem(tview.NewTextView().
-			SetText("j:down k:up return:select R:rename D:delete q:quit").
+			SetText("j:down k:up return:select E:edit D:delete q:quit").
 			SetTextColor(tcell.ColorYellow), 2, 1, false).
 		AddItem(v.list, 0, 1, true)
 
@@ -58,9 +58,9 @@ func (l *ContextListView) onInput(e *tcell.EventKey) *tcell.EventKey {
 			return tcell.NewEventKey(tcell.KeyUp, 0, tcell.ModNone)
 		case 'D':
 			l.deleteContext()
-		case 'R':
+		case 'E':
 			contextName, _ := l.list.GetItemText(l.list.GetCurrentItem())
-			app.Push(NewRenameContextView(contextName))
+			app.Push(NewEditContextView(contextName))
 		case 'q':
 			app.Pop()
 		}
